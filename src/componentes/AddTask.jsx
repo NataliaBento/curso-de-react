@@ -13,6 +13,7 @@ function AddTask({ onAddTaskSubmit }) {
         //SEMPRE QUE VC USAR JAVASCRIPT DENTRO DO RETURN É COM CHAVES A FUNÇÃO
         onChange={(event) => setTitle(event.target.value)}
       />
+
       <input
         type="text"
         placeholder="Digite a descrição da tarefa"

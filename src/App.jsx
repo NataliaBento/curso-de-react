@@ -1,31 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddTask from "./componentes/AddTask";
 import Tasks from "./componentes/Tasks";
 import { v4 } from "uuid";
 
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Estudar programação",
-      description:
-        "Estudar programação para se tornar um desenvolvedor fullstack.",
-      isCompleted: false,
-    },
-    {
-      id: 2,
-      title: "Estudar Inglês",
-      description: "Estudar inglês para se tornar fluente.",
-      isCompleted: false,
-    },
-    {
-      id: 3,
-      title: "Estudar Matemática",
-      description:
-        "Estudar Matemática para se tornar um desenvolvedor fullstack.",
-      isCompleted: false,
-    },
-  ]);
+  const [tasks, setTasks] = useState(
+    JSON.parse(localStorage.getItem("tasks")) || []
+  );
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      //CHAMAR API
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/todos?_limit=10",
+        { method: "GET" }
+      );
+
+      // PEGAR OS DADOS QUE ELA RETORNA
+      const data = await response.json();
+
+      // ARMAZENAR/ PERSISTIR ESSES DADOS NO STATE
+      setTasks(data);
+    };
+    //SE QUISER, VOCÊ PODE CHAMAR UMA API PARA PEGAR AS TAREFAS
+    //fetchTasks();
+  }, []);
 
   function onTaskClick(taskId) {
     const newTasks = tasks.map((task) => {
